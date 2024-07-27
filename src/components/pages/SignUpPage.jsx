@@ -14,8 +14,8 @@ const SignUpPage = () => {
     e.preventDefault();
 
     // Basic client-side validation
-    if (form.password.length < 6) {
-      alert("Password must be at least 6 characters long.");
+    if (form.password.length < 3) {
+      alert("Password must be at least 3 characters long.");
       return;
     }
 
