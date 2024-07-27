@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -9,7 +12,17 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
+    axios
+      .post("/auth/login", form)
+      .then((response) => {
+        // Store the JWT token in localStorage
+        localStorage.setItem("token", response.data.authToken);
+        // Redirect to home or desired page
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Login Error:", error);
+      });
   };
 
   return (

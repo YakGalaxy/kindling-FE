@@ -7,6 +7,7 @@ import KitCreationPage from "./components/pages/KitCreationPage";
 import KitsPage from "./components/pages/KitsPage";
 import ProfilePage from "./components/pages/ProfilePage";
 import NotFoundPage from "./components/pages/NotFoundPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppRoutes = () => (
     <Routes>
@@ -14,10 +15,10 @@ const AppRoutes = () => (
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route
-        path="/handover-kits/create"
+        path="/kits/create"
         element={<KitCreationPage />}
       />
-      <Route path="/handover-kits" element={<KitsPage />} />
+      <Route path="/kits" element={<KitsPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

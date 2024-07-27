@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -9,7 +12,15 @@ const SignUpPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle sign-up logic here
+    axios
+      .post("/auth/signup", form)
+      .then((response) => {
+        // On successful signup, redirect to login page or home
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.error("Signup Error:", error);
+      });
   };
 
   return (
