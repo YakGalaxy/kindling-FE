@@ -9,7 +9,6 @@ import ProfilePage from "./components/pages/ProfilePage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 
 const AppRoutes = () => (
-  <Router>
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/signup" element={<SignUpPage />} />
@@ -22,7 +21,6 @@ const AppRoutes = () => (
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
-  </Router>
 );
 
 export default AppRoutes;
