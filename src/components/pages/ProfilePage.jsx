@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProfileService from "../services/profileService";
+import ProfileService from "../../services/profileService";
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({});

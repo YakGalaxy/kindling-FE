@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import HandoverKitService from "../services/handoverKitService";
+import HandoverKitService from "../../services/handoverKitService";
 
 const CreateHandoverKitPage = () => {
   const [title, setTitle] = useState("");
