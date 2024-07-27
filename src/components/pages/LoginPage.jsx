@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../services/api"; // Ensure this path is correct
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
@@ -12,16 +12,16 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .post("/auth/login", form)
       .then((response) => {
-        // Store the JWT token in localStorage
-        localStorage.setItem("token", response.data.authToken);
-        // Redirect to home or desired page
-        navigate("/");
+        const { authToken } = response.data; // Ensure this matches backend response
+        localStorage.setItem("token", authToken); // Store the JWT token
+        navigate("/"); // Redirect to desired page
       })
       .catch((error) => {
-        console.error("Login Error:", error);
+        console.error("Login Error:", error.response?.data || error.message);
+        alert("Login failed. Please check your credentials.");
       });
   };
 

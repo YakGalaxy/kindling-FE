@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import HandoverKitService from "../../services/handoverKitService";
 
-const CreateHandoverKitPage = () => {
+const KitCreationPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -40,4 +40,4 @@ const CreateHandoverKitPage = () => {
   );
 };
 
-export default CreateHandoverKitPage;
+export default KitCreationPage;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../services/api"; // Adjust the path if necessary
 import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
@@ -12,14 +12,24 @@ const SignUpPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("/auth/signup", form)
+
+    // Basic client-side validation
+    if (form.password.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
+
+    api
+      .post("/auth/signup", form) // Using the API service instance
       .then((response) => {
-        // On successful signup, redirect to login page or home
         navigate("/login");
       })
       .catch((error) => {
         console.error("Signup Error:", error);
+        alert(
+          "An error occurred: " +
+            (error.response?.data?.error || "Please try again")
+        );
       });
   };
 
