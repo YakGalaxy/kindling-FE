@@ -1,69 +1,52 @@
-// src/components/pages/ProfilePage.js
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import ProfileService from "../services/profileService";
 
 const ProfilePage = () => {
-  const [profile, setProfile] = useState({
-    username: "",
-    email: "",
-    preferences: "",
-  });
+  const [profile, setProfile] = useState({});
 
   useEffect(() => {
-    // Fetch user profile from the backend
-    axios
-      .get("/api/profile")
+    ProfileService.getProfile()
       .then((response) => setProfile(response.data))
-      .catch((error) => console.error("Error fetching profile:", error));
+      .catch((error) => console.error(error));
   }, []);
 
   const handleChange = (e) => {
-    setProfile({ ...profile, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setProfile({ ...profile, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle profile update logic here
-    axios
-      .put("/api/profile", profile)
-      .then((response) => console.log("Profile updated:", response.data))
-      .catch((error) => console.error("Error updating profile:", error));
+    ProfileService.updateProfile(profile)
+      .then((response) => console.log("Profile Updated:", response.data))
+      .catch((error) => console.error(error));
   };
 
   return (
     <div>
       <h1>Profile</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Username:
+        <div>
+          <label>Username</label>
           <input
             type="text"
             name="username"
-            value={profile.username}
+            value={profile.username || ""}
             onChange={handleChange}
+            required
           />
-        </label>
-        <br />
-        <label>
-          Email:
+        </div>
+        <div>
+          <label>Email</label>
           <input
             type="email"
             name="email"
-            value={profile.email}
+            value={profile.email || ""}
             onChange={handleChange}
+            required
           />
-        </label>
-        <br />
-        <label>
-          Preferences:
-          <textarea
-            name="preferences"
-            value={profile.preferences}
-            onChange={handleChange}
-          ></textarea>
-        </label>
-        <br />
-        <button type="submit">Update Profile</button>
+        </div>
+        <button type="submit">Update</button>
       </form>
     </div>
   );

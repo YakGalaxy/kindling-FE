@@ -1,44 +1,43 @@
 import React, { useState } from "react";
+import HandoverKitService from "../services/handoverKitService";
 
-const KitCreationPage = () => {
-  const [form, setForm] = useState({ title: "", description: "" });
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+const CreateHandoverKitPage = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle kit creation logic here
+    const newKit = { title, description };
+    HandoverKitService.createKit(newKit)
+      .then((response) => console.log("Handover Kit Created:", response.data))
+      .catch((error) => console.error(error));
   };
 
   return (
     <div>
       <h1>Create Handover Kit</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Title:
+        <div>
+          <label>Title</label>
           <input
             type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
           />
-        </label>
-        <br />
-        <label>
-          Description:
+        </div>
+        <div>
+          <label>Description</label>
           <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-          ></textarea>
-        </label>
-        <br />
-        <button type="submit">Create Kit</button>
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Create</button>
       </form>
     </div>
   );
 };
 
-export default KitCreationPage;
+export default CreateHandoverKitPage;
