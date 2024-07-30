@@ -1,13 +1,33 @@
 import React, { useEffect, useState } from "react";
-import ProfileService from "../../services/profileService";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
+import ProfileService from "../../services/profileService"; // Ensure this path is correct
 
 const ProfilePage = () => {
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState({ username: "", email: "" });
+  const [error, setError] = useState(""); // For handling errors
+  const [success, setSuccess] = useState(""); // For successful updates
+  const [loading, setLoading] = useState(false); // For handling loading state
 
   useEffect(() => {
+    setLoading(true);
     ProfileService.getProfile()
-      .then((response) => setProfile(response.data))
-      .catch((error) => console.error(error));
+      .then((response) => {
+        setProfile(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to fetch profile.");
+        setLoading(false);
+        console.error(error);
+      });
   }, []);
 
   const handleChange = (e) => {
@@ -17,38 +37,71 @@ const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     ProfileService.updateProfile(profile)
-      .then((response) => console.log("Profile Updated:", response.data))
-      .catch((error) => console.error(error));
+      .then((response) => {
+        setSuccess("Profile updated successfully!");
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to update profile.");
+        setLoading(false);
+        console.error(error);
+      });
   };
 
   return (
-    <div>
-      <h1>Profile</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            value={profile.username || ""}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={profile.email || ""}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Update</button>
-      </form>
-    </div>
+    <Container
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        minHeight: "100vh",
+        p: 3,
+      }}
+    >
+      <Typography variant="h4" component="h1" gutterBottom>
+        Profile
+      </Typography>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+      {success && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {success}
+        </Alert>
+      )}
+      {loading && <CircularProgress sx={{ mb: 2 }} />}
+      <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+        <TextField
+          label="Username"
+          name="username"
+          value={profile.username}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Email"
+          name="email"
+          type="email"
+          value={profile.email}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <Box sx={{ mt: 2 }}>
+          <Button variant="contained" color="primary" type="submit" fullWidth>
+            Update
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

@@ -25,7 +25,7 @@ const LoginPage = () => {
       const response = await api.post("/auth/login", form);
       const { authToken } = response.data; // Ensure this matches backend response
       localStorage.setItem("token", authToken); // Store the JWT token
-      navigate("/"); // Redirect to desired page
+      navigate("/Kits"); // Redirect to desired page
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);
       setError("Login failed. Please check your credentials.");
