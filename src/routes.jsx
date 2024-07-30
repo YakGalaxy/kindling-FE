@@ -5,6 +5,8 @@ import LoginPage from "./components/pages/LoginPage";
 import LandingPage from "./components/pages/LandingPage";
 import KitsPage from "./components/pages/KitsPage";
 import KitCreationPage from "./components/pages/KitCreationPage";
+import ProfilePage from "./components/pages/ProfilePage";
+import NotFoundPage from "./components/pages/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -18,6 +20,11 @@ function App() {
         path="/kits/create"
         element={<ProtectedRoute element={KitCreationPage} />}
       />
+      <Route
+        path="/profile"
+        element={<ProtectedRoute element={ProfilePage} />}
+      />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
