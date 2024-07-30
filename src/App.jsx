@@ -1,16 +1,19 @@
 import React from "react";
 import AppRoutes from "./routes";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 import KeyboardShortcutsProvider from "./utils/KeyboardShortcutsProvider"; 
+import theme from "./theme"; 
 
 const App = () => (
-  <KeyboardShortcutsProvider>
-    <Router>
-      <CssBaseline />
-      <AppRoutes />
-    </Router>
-  </KeyboardShortcutsProvider>
+  <ThemeProvider theme={theme}>
+    <KeyboardShortcutsProvider>
+      <Router>
+        <CssBaseline />
+        <AppRoutes />
+      </Router>
+    </KeyboardShortcutsProvider>
+  </ThemeProvider>
 );
 
 export default App;
