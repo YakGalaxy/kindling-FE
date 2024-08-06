@@ -9,6 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import ProfileService from "../../services/profileService"; // Ensure this path is correct
+import Header from "../../components/header"; 
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({ username: "", email: "" });
@@ -51,57 +52,60 @@ const ProfilePage = () => {
   };
 
   return (
-    <Container
-      maxWidth="xs"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        minHeight: "100vh",
-        p: 3,
-      }}
-    >
-      <Typography variant="h4" component="h1" gutterBottom>
-        Profile
-      </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          {success}
-        </Alert>
-      )}
-      {loading && <CircularProgress sx={{ mb: 2 }} />}
-      <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
-        <TextField
-          label="Username"
-          name="username"
-          value={profile.username}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          value={profile.email}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <Box sx={{ mt: 2 }}>
-          <Button variant="contained" color="primary" type="submit" fullWidth>
-            Update
-          </Button>
+    <>
+      <Header />
+      <Container
+        maxWidth="xs"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          minHeight: "100vh",
+          p: 3,
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom>
+          Profile
+        </Typography>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {success}
+          </Alert>
+        )}
+        {loading && <CircularProgress sx={{ mb: 2 }} />}
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+          <TextField
+            label="Username"
+            name="username"
+            value={profile.username}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            value={profile.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <Box sx={{ mt: 2 }}>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              Update
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </>
   );
 };
 

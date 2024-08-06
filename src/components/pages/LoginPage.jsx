@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import api from "../../services/api"; // Ensure this path is correct
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/header"; 
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -32,54 +33,83 @@ const LoginPage = () => {
     }
   };
 
+  const handleReturnHome = () => {
+    navigate("/");
+  };
+
   return (
-    <Container
-      maxWidth="xs"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        p: 3,
-      }}
-    >
-      <Typography variant="h4" component="h1" gutterBottom>
-        Login
-      </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-      <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Password"
-          name="password"
-          type="password"
-          value={form.password}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <Box sx={{ mt: 2 }}>
-          <Button variant="contained" color="primary" type="submit" fullWidth>
+    <>
+      <Header />
+      <Container
+        maxWidth="xs"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h4" component="h1" gutterBottom>
             Login
-          </Button>
+          </Typography>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2, width: "100%" }}>
+              {error}
+            </Alert>
+          )}
+          <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+            />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+            />
+            <Box sx={{ mt: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                fullWidth
+              >
+                Login
+              </Button>
+            </Box>
+          </Box>
+          <Box sx={{ mt: 2, width: "100%" }}>
+            <Button
+              variant="text"
+              color="secondary"
+              onClick={handleReturnHome}
+              fullWidth
+            >
+              Return to Homepage
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </>
   );
 };
 
