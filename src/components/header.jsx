@@ -1,5 +1,4 @@
-// Header.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -9,18 +8,39 @@ import {
   IconButton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../services/authService";
 
 const Header = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    };
+
+    checkAuth();
+  }, []);
 
   const handleNavigate = (path) => {
     navigate(path);
   };
 
+  const handleAuthAction = () => {
+    if (isLoggedIn) {
+      logout();
+      localStorage.removeItem("token");
+      setIsLoggedIn(false);
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
-        {/* Kindling Logo */}
         <IconButton
           edge="start"
           color="inherit"
@@ -30,16 +50,15 @@ const Header = () => {
         >
           <Typography variant="h6">Kindling</Typography>
         </IconButton>
-
-        {/* Spacer to push buttons to the far right */}
         <Box sx={{ flexGrow: 1 }} />
-
-        {/* Navigation Buttons */}
         <Button color="inherit" onClick={() => handleNavigate("/kits")}>
           Kits
         </Button>
         <Button color="inherit" onClick={() => handleNavigate("/profile")}>
           Profile
+        </Button>
+        <Button color="inherit" onClick={handleAuthAction}>
+          {isLoggedIn ? "Logout" : "Login"}
         </Button>
       </Toolbar>
     </AppBar>

@@ -1,10 +1,15 @@
 import React from "react";
 import { Button, Container, Typography, Box } from "@mui/material";
-import { logout } from "../../services/authService";
-import Header from "../../components/header"; 
-
+import { useNavigate } from "react-router-dom";
+import Header from "../../components/header";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
+  const handleSignUp = () => {
+    navigate("/signup");
+  };
+
   return (
     <>
       <Header />
@@ -31,9 +36,9 @@ const LandingPage = () => {
             variant="contained"
             color="primary"
             size="large"
-            onClick={logout}
+            onClick={handleSignUp}
           >
-            Logout
+            Sign Up
           </Button>
         </Box>
       </Container>

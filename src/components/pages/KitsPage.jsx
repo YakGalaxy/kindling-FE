@@ -10,10 +10,9 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import HandoverKitService from "../../services/handoverKitService"; // Ensure this path is correct
+import HandoverKitService from "../../services/handoverKitService";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../services/authService"; // Ensure this path is correct
-import Header from "../../components/header"; 
+import Header from "../../components/header";
 
 const KitsPage = () => {
   const [kits, setKits] = useState([]);
@@ -37,7 +36,7 @@ const KitsPage = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login"); // Redirect to login page after logout
+    navigate("/login");
   };
 
   return (

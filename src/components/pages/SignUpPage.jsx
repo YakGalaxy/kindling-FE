@@ -7,8 +7,9 @@ import {
   Box,
   Alert,
 } from "@mui/material";
-import api from "../../services/api"; // Ensure this path is correct
+import api from "../../services/api"; 
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/header"; 
 
 const SignUpPage = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -42,67 +43,70 @@ const SignUpPage = () => {
   };
 
   return (
-    <Container
-      maxWidth="xs"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        p: 3,
-      }}
-    >
-      <Typography variant="h4" component="h1" gutterBottom>
-        Sign Up
-      </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          {success}
-        </Alert>
-      )}
-      <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
-        <TextField
-          label="Username"
-          name="username"
-          value={form.username}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Password"
-          name="password"
-          type="password"
-          value={form.password}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <Box sx={{ mt: 2 }}>
-          <Button variant="contained" color="primary" type="submit" fullWidth>
-            Sign Up
-          </Button>
+    <>
+      <Header />
+      <Container
+        maxWidth="xs"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          p: 3,
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom>
+          Sign Up
+        </Typography>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {success}
+          </Alert>
+        )}
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+          <TextField
+            label="Username"
+            name="username"
+            value={form.username}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Password"
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <Box sx={{ mt: 2 }}>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              Sign Up
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </>
   );
 };
 

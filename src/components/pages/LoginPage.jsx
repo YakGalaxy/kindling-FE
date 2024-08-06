@@ -7,13 +7,13 @@ import {
   Box,
   Alert,
 } from "@mui/material";
-import api from "../../services/api"; // Ensure this path is correct
+import api from "../../services/api"; 
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/header"; 
+import Header from "../../components/header";
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState(""); // To handle login errors
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -24,9 +24,9 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await api.post("/auth/login", form);
-      const { authToken } = response.data; // Ensure this matches backend response
-      localStorage.setItem("token", authToken); // Store the JWT token
-      navigate("/Kits"); // Redirect to desired page
+      const { authToken } = response.data;
+      localStorage.setItem("token", authToken);
+      navigate("/kits");
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);
       setError("Login failed. Please check your credentials.");

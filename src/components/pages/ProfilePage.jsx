@@ -8,7 +8,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import ProfileService from "../../services/profileService"; // Ensure this path is correct
+import ProfileService from "../../services/profileService"; 
 import Header from "../../components/header"; 
 
 const ProfilePage = () => {
