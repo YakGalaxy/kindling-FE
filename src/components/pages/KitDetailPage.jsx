@@ -143,7 +143,7 @@ const KitDetailPage = () => {
                     <CardMedia
                       component="img"
                       height="140"
-                      image="https://via.placeholder.com/150"
+                      image="https://placehold.co/150"
                       alt={`Link ${index + 1}`}
                     />
                     <CardContent>
