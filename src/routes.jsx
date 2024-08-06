@@ -5,6 +5,7 @@ import LoginPage from "./components/pages/LoginPage";
 import LandingPage from "./components/pages/LandingPage";
 import KitsPage from "./components/pages/KitsPage";
 import KitCreationPage from "./components/pages/KitCreationPage";
+import KitDetailPage from "./components/pages/KitDetailPage";
 import ProfilePage from "./components/pages/ProfilePage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -19,6 +20,10 @@ function App() {
       <Route
         path="/kits/create"
         element={<ProtectedRoute element={KitCreationPage} />}
+      />
+      <Route
+        path="/kits/:kitId"
+        element={<ProtectedRoute element={KitDetailPage} />} // Add route for kit details
       />
       <Route
         path="/profile"

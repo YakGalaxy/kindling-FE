@@ -1,3 +1,4 @@
+// KitsPage.js
 import React, { useEffect, useState } from "react";
 import {
   Container,
@@ -13,6 +14,7 @@ import {
 import HandoverKitService from "../../services/handoverKitService";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
+import { logout } from "../../services/authService"; // Ensure this path is correct
 
 const KitsPage = () => {
   const [kits, setKits] = useState([]);
@@ -39,6 +41,10 @@ const KitsPage = () => {
     navigate("/login");
   };
 
+  const handleKitClick = (kitId) => {
+    navigate(`/kits/${kitId}`);
+  };
+
   return (
     <>
       <Header />
@@ -46,14 +52,6 @@ const KitsPage = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Handover Kits
         </Typography>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleLogout}
-          sx={{ mb: 2 }}
-        >
-          Logout
-        </Button>
         <Button
           variant="contained"
           color="primary"
@@ -72,7 +70,11 @@ const KitsPage = () => {
           <Box>
             <List>
               {kits.map((kit) => (
-                <ListItem key={kit._id} button>
+                <ListItem
+                  key={kit._id}
+                  button
+                  onClick={() => handleKitClick(kit._id)}
+                >
                   <ListItemText primary={kit.title} />
                 </ListItem>
               ))}
