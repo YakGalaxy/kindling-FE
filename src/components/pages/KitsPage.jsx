@@ -1,13 +1,13 @@
-// KitsPage.js
 import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
   CircularProgress,
   Alert,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
   Box,
   Button,
 } from "@mui/material";
@@ -48,7 +48,7 @@ const KitsPage = () => {
   return (
     <>
       <Header />
-      <Container maxWidth="md" sx={{ pt: 4 }}>
+      <Container maxWidth="lg" sx={{ pt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Handover Kits
         </Typography>
@@ -56,6 +56,7 @@ const KitsPage = () => {
           variant="contained"
           color="primary"
           onClick={() => navigate("/kits/create")}
+          sx={{ mb: 4 }}
         >
           Create New Kit
         </Button>
@@ -68,22 +69,37 @@ const KitsPage = () => {
           <CircularProgress />
         ) : (
           <Box>
-            <List>
-              {kits.map((kit) => (
-                <ListItem
-                  key={kit._id}
-                  button
-                  onClick={() => handleKitClick(kit._id)}
-                >
-                  <ListItemText primary={kit.title} />
-                </ListItem>
-              ))}
-            </List>
-            {kits.length === 0 && (
-              <Typography variant="body1" sx={{ mt: 2 }}>
-                No handover kits available.
-              </Typography>
-            )}
+            <Grid container spacing={4}>
+              {kits.length > 0 ? (
+                kits.map((kit) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={kit._id}>
+                    <Card
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => handleKitClick(kit._id)}
+                    >
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={kit.imageUrl || "https://placehold.co/150"} // Placeholder image if none provided
+                        alt={kit.title}
+                      />
+                      <CardContent>
+                        <Typography variant="h6" component="div">
+                          {kit.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {kit.description}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))
+              ) : (
+                <Typography variant="body1" sx={{ mt: 2 }}>
+                  No handover kits available.
+                </Typography>
+              )}
+            </Grid>
           </Box>
         )}
       </Container>

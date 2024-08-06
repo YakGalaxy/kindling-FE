@@ -25,6 +25,7 @@ const KitDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [shareableUrl, setShareableUrl] = useState("");
+  const [editMode, setEditMode] = useState(false); // New state for edit mode
   const { kitId } = useParams();
   const navigate = useNavigate();
 
@@ -47,6 +48,33 @@ const KitDetailPage = () => {
     alert("URL copied to clipboard!");
   };
 
+  const handleEditToggle = () => {
+    setEditMode(!editMode);
+  };
+
+  const handleSave = () => {
+    setLoading(true);
+    HandoverKitService.updateKit(kitId, {
+      title: kit.title,
+      description: kit.description,
+    })
+      .then((response) => {
+        setKit(response.data);
+        setEditMode(false);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to update kit.");
+        setLoading(false);
+        console.error(error);
+      });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setKit((prevKit) => ({ ...prevKit, [name]: value }));
+  };
+
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
 
@@ -61,17 +89,20 @@ const KitDetailPage = () => {
               Kit Title
             </Typography>
             <TextField
+              name="title"
               label="Kit Title"
               variant="outlined"
               fullWidth
               margin="normal"
               value={kit.title}
+              onChange={handleChange}
               InputProps={{
-                readOnly: true,
+                readOnly: !editMode,
               }}
               sx={{ mb: 2 }}
             />
             <TextField
+              name="description"
               label="Description"
               variant="outlined"
               fullWidth
@@ -79,8 +110,9 @@ const KitDetailPage = () => {
               multiline
               rows={4}
               value={kit.description}
+              onChange={handleChange}
               InputProps={{
-                readOnly: true,
+                readOnly: !editMode,
               }}
               sx={{ mb: 2 }}
             />
@@ -139,6 +171,41 @@ const KitDetailPage = () => {
               </Alert>
             )}
             <Divider sx={{ my: 4 }} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              {editMode ? (
+                <>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSave}
+                    sx={{ mr: 2 }}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleEditToggle}
+                  >
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEditToggle}
+                >
+                  Edit
+                </Button>
+              )}
+            </Box>
             <Typography variant="h6" component="h2" gutterBottom>
               Kit Sharing Links
             </Typography>
