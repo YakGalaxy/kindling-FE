@@ -7,7 +7,7 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
+  CardMedia, // Ensure this is imported
   Box,
   Button,
 } from "@mui/material";
@@ -45,6 +45,13 @@ const KitsPage = () => {
     navigate(`/kits/${kitId}`);
   };
 
+  const handleCreateNewKit = () => {
+    navigate("/kits/create");
+  };
+
+  // Limit kits to a maximum of 7 items, as the 8th item will be the "Add a Kit" card
+  const displayedKits = kits.slice(0, 7);
+
   return (
     <>
       <Header />
@@ -52,14 +59,6 @@ const KitsPage = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Handover Kits
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/kits/create")}
-          sx={{ mb: 4 }}
-        >
-          Create New Kit
-        </Button>
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -70,8 +69,8 @@ const KitsPage = () => {
         ) : (
           <Box>
             <Grid container spacing={4}>
-              {kits.length > 0 ? (
-                kits.map((kit) => (
+              {displayedKits.length > 0 ? (
+                displayedKits.map((kit) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={kit._id}>
                     <Card
                       sx={{ cursor: "pointer" }}
@@ -99,6 +98,39 @@ const KitsPage = () => {
                   No handover kits available.
                 </Typography>
               )}
+              {/* Add "Create New Kit" card */}
+              <Grid item xs={12} sm={6} md={4} lg={3}>
+                <Card
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    backgroundColor: "#6a1b9a", // Purple background color
+                    color: "white", // Text color for contrast
+                    "&:hover": {
+                      backgroundColor: "#4a148c", // Darker shade of purple on hover
+                      transition: "background-color 0.3s",
+                    },
+                  }}
+                  onClick={handleCreateNewKit}
+                >
+                  <Box
+                    sx={{
+                      p: 2,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Typography variant="h6" component="div">
+                      + Add a Kit
+                    </Typography>
+                  </Box>
+                </Card>
+              </Grid>
             </Grid>
           </Box>
         )}
