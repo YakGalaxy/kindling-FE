@@ -39,16 +39,6 @@ const Header = () => {
     }
   };
 
-  const profileId = localStorage.getItem("profileId"); // Get profile ID from local storage
-
-  const handleProfileClick = () => {
-    if (profileId) {
-      handleNavigate(`/profile/${profileId}`); // Navigate to specific profile page
-    } else {
-      handleNavigate("/profile"); // Navigate to default profile page
-    }
-  };
-
   return (
     <AppBar position="static">
       <Toolbar>
@@ -65,11 +55,6 @@ const Header = () => {
         <Button color="inherit" onClick={() => handleNavigate("/kits")}>
           Kits
         </Button>
-        {isLoggedIn && (
-          <Button color="inherit" onClick={handleProfileClick}>
-            Profile
-          </Button>
-        )}
         <Button color="inherit" onClick={handleAuthAction}>
           {isLoggedIn ? "Logout" : "Login"}
         </Button>

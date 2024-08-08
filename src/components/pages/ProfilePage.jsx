@@ -10,23 +10,16 @@ import {
 } from "@mui/material";
 import ProfileService from "../../services/profileService";
 import Header from "../../components/header";
-import { useParams } from "react-router-dom"; // Ensure this import
 
 const ProfilePage = () => {
-  const { id } = useParams(); // Extract ID from URL parameters
   const [profile, setProfile] = useState({ username: "", email: "" });
-  const [error, setError] = useState(""); // For handling errors
-  const [success, setSuccess] = useState(""); // For successful updates
-  const [loading, setLoading] = useState(false); // For handling loading state
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!id) {
-      setError("Profile ID is missing.");
-      return;
-    }
-
     setLoading(true);
-    ProfileService.getProfileById(id) // Fetch profile by ID
+    ProfileService.getProfiles() // Adjusted to fetch profile data
       .then((response) => {
         setProfile(response.data);
         setLoading(false);
@@ -36,7 +29,7 @@ const ProfilePage = () => {
         setLoading(false);
         console.error(error);
       });
-  }, [id]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,13 +38,8 @@ const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!id) {
-      setError("Profile ID is missing.");
-      return;
-    }
-
     setLoading(true);
-    ProfileService.updateProfile(id, profile) // Update profile by ID
+    ProfileService.updateProfile(profile)
       .then((response) => {
         setSuccess("Profile updated successfully!");
         setLoading(false);
