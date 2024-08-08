@@ -8,10 +8,12 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import ProfileService from "../../services/profileService"; 
-import Header from "../../components/header"; 
+import ProfileService from "../../services/profileService";
+import Header from "../../components/header";
+import { useParams } from "react-router-dom"; // For getting URL parameters
 
 const ProfilePage = () => {
+  const { id } = useParams(); // Get profile ID from URL parameters
   const [profile, setProfile] = useState({ username: "", email: "" });
   const [error, setError] = useState(""); // For handling errors
   const [success, setSuccess] = useState(""); // For successful updates
@@ -19,7 +21,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     setLoading(true);
-    ProfileService.getProfile()
+    ProfileService.getProfileById(id) // Fetch profile by ID
       .then((response) => {
         setProfile(response.data);
         setLoading(false);
@@ -29,7 +31,7 @@ const ProfilePage = () => {
         setLoading(false);
         console.error(error);
       });
-  }, []);
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +41,7 @@ const ProfilePage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    ProfileService.updateProfile(profile)
+    ProfileService.updateProfile(id, profile) // Update profile by ID
       .then((response) => {
         setSuccess("Profile updated successfully!");
         setLoading(false);
