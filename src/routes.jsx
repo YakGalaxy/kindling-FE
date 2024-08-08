@@ -12,25 +12,31 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/kits" element={<ProtectedRoute element={KitsPage} />} />
-      <Route
-        path="/kits/create"
-        element={<ProtectedRoute element={KitCreationPage} />}
-      />
-      <Route
-        path="/kits/:kitId"
-        element={<ProtectedRoute element={KitDetailPage} />} // Add route for kit details
-      />
-      <Route
-        path="/profile"
-        element={<ProtectedRoute element={ProfilePage} />}
-      />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/kits" element={<ProtectedRoute element={KitsPage} />} />
+        <Route
+          path="/kits/create"
+          element={<ProtectedRoute element={KitCreationPage} />}
+        />
+        <Route
+          path="/kits/:kitId"
+          element={<ProtectedRoute element={KitDetailPage} />}
+        />
+        {/* Route for profile with ID */}
+        <Route
+          path="/profile/:id"
+          element={<ProtectedRoute element={ProfilePage} />}
+        />
+        {/* Default profile route */}
+        <Route
+          path="/profile"
+          element={<ProtectedRoute element={ProfilePage} />}
+        />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
   );
 }
 

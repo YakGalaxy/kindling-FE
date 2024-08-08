@@ -31,10 +31,21 @@ const Header = () => {
     if (isLoggedIn) {
       logout();
       localStorage.removeItem("token");
+      localStorage.removeItem("profileId"); // Clear profile ID if necessary
       setIsLoggedIn(false);
       navigate("/");
     } else {
       navigate("/login");
+    }
+  };
+
+  const profileId = localStorage.getItem("profileId"); // Get profile ID from local storage
+
+  const handleProfileClick = () => {
+    if (profileId) {
+      handleNavigate(`/profile/${profileId}`); // Navigate to specific profile page
+    } else {
+      handleNavigate("/profile"); // Navigate to default profile page
     }
   };
 
@@ -54,9 +65,11 @@ const Header = () => {
         <Button color="inherit" onClick={() => handleNavigate("/kits")}>
           Kits
         </Button>
-        <Button color="inherit" onClick={() => handleNavigate("/profile")}>
-          Profile
-        </Button>
+        {isLoggedIn && (
+          <Button color="inherit" onClick={handleProfileClick}>
+            Profile
+          </Button>
+        )}
         <Button color="inherit" onClick={handleAuthAction}>
           {isLoggedIn ? "Logout" : "Login"}
         </Button>

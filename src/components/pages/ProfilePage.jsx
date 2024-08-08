@@ -10,16 +10,21 @@ import {
 } from "@mui/material";
 import ProfileService from "../../services/profileService";
 import Header from "../../components/header";
-import { useParams } from "react-router-dom"; // For getting URL parameters
+import { useParams } from "react-router-dom"; // Ensure this import
 
 const ProfilePage = () => {
-  const { id } = useParams(); // Get profile ID from URL parameters
+  const { id } = useParams(); // Extract ID from URL parameters
   const [profile, setProfile] = useState({ username: "", email: "" });
   const [error, setError] = useState(""); // For handling errors
   const [success, setSuccess] = useState(""); // For successful updates
   const [loading, setLoading] = useState(false); // For handling loading state
 
   useEffect(() => {
+    if (!id) {
+      setError("Profile ID is missing.");
+      return;
+    }
+
     setLoading(true);
     ProfileService.getProfileById(id) // Fetch profile by ID
       .then((response) => {
@@ -40,6 +45,11 @@ const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!id) {
+      setError("Profile ID is missing.");
+      return;
+    }
+
     setLoading(true);
     ProfileService.updateProfile(id, profile) // Update profile by ID
       .then((response) => {
