@@ -162,29 +162,23 @@ const KitDetailPage = () => {
 
           {/* Right Section */}
           <Box sx={{ flex: "1 1 67%", pl: 2 }}>
-            <Typography variant="h4" component="h1" gutterBottom>
-              Kit Details
-            </Typography>
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
-            <Divider sx={{ my: 4 }} />
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                mb: 4,
               }}
             >
+              <Typography variant="h4" component="h1">
+                Kit Details
+              </Typography>
               {editMode ? (
-                <>
+                <Box sx={{ display: "flex", gap: 2 }}>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSave}
-                    sx={{ mr: 2 }}
                   >
                     Save
                   </Button>
@@ -195,7 +189,7 @@ const KitDetailPage = () => {
                   >
                     Cancel
                   </Button>
-                </>
+                </Box>
               ) : (
                 <Button
                   variant="contained"
@@ -206,6 +200,9 @@ const KitDetailPage = () => {
                 </Button>
               )}
             </Box>
+            <Divider sx={{ my: 4 }} />
+
+            {/* Kit Sharing Links and Social Links */}
             <Typography variant="h6" component="h2" gutterBottom>
               Kit Sharing Links
             </Typography>
