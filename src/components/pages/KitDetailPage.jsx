@@ -19,13 +19,17 @@ import { Facebook, Twitter, LinkedIn, CopyAll } from "@mui/icons-material";
 import HandoverKitService from "../../services/handoverKitService";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/header";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Delete } from "@mui/icons-material";
+import { v4 as uuidv4 } from 'uuid'; // Import uuid for unique IDs
 
 const KitDetailPage = () => {
   const [kit, setKit] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [shareableUrl, setShareableUrl] = useState("");
-  const [editMode, setEditMode] = useState(false); // New state for edit mode
+  const [editMode, setEditMode] = useState(false);
+  const [contentItems, setContentItems] = useState([]);
   const { kitId } = useParams();
   const navigate = useNavigate();
 
@@ -54,10 +58,13 @@ const KitDetailPage = () => {
 
   const handleSave = () => {
     setLoading(true);
-    HandoverKitService.updateKit(kitId, {
+    const updatedKit = {
       title: kit.title,
       description: kit.description,
-    })
+      contentItems,
+    };
+
+    HandoverKitService.updateKit(kitId, updatedKit)
       .then((response) => {
         setKit(response.data);
         setEditMode(false);
@@ -73,6 +80,21 @@ const KitDetailPage = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setKit((prevKit) => ({ ...prevKit, [name]: value }));
+  };
+
+  const addContentItem = (type) => {
+    setContentItems((prevItems) => [
+      ...prevItems,
+      { id: uuidv4(), type, value: "" },
+    ]);
+  };
+
+  const handleContentChange = (index, newValue) => {
+    setContentItems((prevItems) =>
+      prevItems.map((item, i) =>
+        i === index ? { ...item, value: newValue } : item
+      )
+    );
   };
 
   if (loading) return <CircularProgress />;
@@ -120,13 +142,25 @@ const KitDetailPage = () => {
               Text
             </Typography>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 2 }}>
-              <Button variant="outlined" sx={{ flex: "1 1 auto" }}>
+              <Button
+                variant="outlined"
+                sx={{ flex: "1 1 auto" }}
+                onClick={() => addContentItem("title")}
+              >
                 Title
               </Button>
-              <Button variant="outlined" sx={{ flex: "1 1 auto" }}>
+              <Button
+                variant="outlined"
+                sx={{ flex: "1 1 auto" }}
+                onClick={() => addContentItem("description")}
+              >
                 Description
               </Button>
-              <Button variant="outlined" sx={{ flex: "1 1 auto" }}>
+              <Button
+                variant="outlined"
+                sx={{ flex: "1 1 auto" }}
+                onClick={() => addContentItem("paragraph")}
+              >
                 Paragraph
               </Button>
             </Box>
@@ -167,42 +201,42 @@ const KitDetailPage = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                mb: 4,
               }}
             >
-              <Typography variant="h4" component="h1">
+              <Typography variant="h4" component="h1" gutterBottom>
                 Kit Details
               </Typography>
-              {editMode ? (
-                <Box sx={{ display: "flex", gap: 2 }}>
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {editMode ? (
+                  <>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSave}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleEditToggle}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleSave}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
                     onClick={handleEditToggle}
                   >
-                    Cancel
+                    Edit
                   </Button>
-                </Box>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleEditToggle}
-                >
-                  Edit
-                </Button>
-              )}
+                )}
+              </Box>
             </Box>
-            <Divider sx={{ my: 4 }} />
 
-            {/* Kit Sharing Links and Social Links */}
+            {/* Kit Sharing Links Section */}
             <Typography variant="h6" component="h2" gutterBottom>
               Kit Sharing Links
             </Typography>
@@ -264,6 +298,115 @@ const KitDetailPage = () => {
                 </Tooltip>
               </Box>
             </Box>
+
+            {/* Divider Underneath Kit Sharing Links */}
+            <Divider sx={{ my: 4 }} />
+
+            {/* New Large Container for Dynamic Content */}
+            <Box
+              sx={{
+                backgroundColor: "#2c2c2c", // Darker background
+                borderRadius: 1,
+                minHeight: "500px",
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                color: "#fff", // White text color for better contrast
+              }}
+            >
+              <Typography variant="h6" gutterBottom>
+                Handover Kit Content
+              </Typography>
+
+              <DragDropContext
+                onDragEnd={(result) => {
+                  if (!result.destination) return;
+
+                  const reorderedItems = Array.from(contentItems);
+                  const [movedItem] = reorderedItems.splice(
+                    result.source.index,
+                    1
+                  );
+                  reorderedItems.splice(result.destination.index, 0, movedItem);
+
+                  setContentItems(reorderedItems);
+                }}
+              >
+                <Droppable droppableId="contentItemsDroppable">
+                  {(provided) => (
+                    <Box
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    >
+                      {contentItems.length === 0 ? (
+                        <Typography variant="body2" color="text.secondary">
+                          Click on the "Title", "Description", or "Paragraph"
+                          buttons on the left to add items here.
+                        </Typography>
+                      ) : (
+                        contentItems.map((item, index) => (
+                          <Draggable
+                            key={item.id} // Use unique ID from item
+                            draggableId={item.id} // Use unique ID from item
+                            index={index}
+                          >
+                            {(provided) => (
+                              <Box
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                sx={{
+                                  backgroundColor: "#444", // Slightly lighter background for the fields
+                                  borderRadius: 1,
+                                  padding: 2,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 2,
+                                }}
+                              >
+                                <TextField
+                                  variant="outlined"
+                                  fullWidth
+                                  margin="normal"
+                                  label={
+                                    item.type.charAt(0).toUpperCase() +
+                                    item.type.slice(1)
+                                  }
+                                  value={item.value}
+                                  onChange={(e) =>
+                                    handleContentChange(index, e.target.value)
+                                  }
+                                  multiline={item.type === "paragraph"}
+                                  rows={item.type === "paragraph" ? 4 : 1}
+                                  InputLabelProps={{
+                                    style: { color: "#fff" }, // White label text
+                                  }}
+                                  InputProps={{
+                                    style: { color: "#fff" }, // White input text
+                                  }}
+                                />
+                                <IconButton
+                                  color="error"
+                                  onClick={() =>
+                                    setContentItems((prevItems) =>
+                                      prevItems.filter((_, i) => i !== index)
+                                    )
+                                  }
+                                >
+                                  <Delete />
+                                </IconButton>
+                              </Box>
+                            )}
+                          </Draggable>
+                        ))
+                      )}
+                      {provided.placeholder}
+                    </Box>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </Box>
           </Box>
         </Box>
       </Container>
@@ -272,3 +415,4 @@ const KitDetailPage = () => {
 };
 
 export default KitDetailPage;
+
