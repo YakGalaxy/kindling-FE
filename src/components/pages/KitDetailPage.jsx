@@ -21,7 +21,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/header";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Delete } from "@mui/icons-material";
-import { v4 as uuidv4 } from 'uuid'; // Import uuid for unique IDs
 
 const KitDetailPage = () => {
   const [kit, setKit] = useState(null);
@@ -29,7 +28,7 @@ const KitDetailPage = () => {
   const [error, setError] = useState("");
   const [shareableUrl, setShareableUrl] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [contentItems, setContentItems] = useState([]);
+  const [contentItems, setContentItems] = useState([]); // New state for dynamic content
   const { kitId } = useParams();
   const navigate = useNavigate();
 
@@ -61,7 +60,7 @@ const KitDetailPage = () => {
     const updatedKit = {
       title: kit.title,
       description: kit.description,
-      contentItems,
+      contentItems, // Include the dynamic content items in the save
     };
 
     HandoverKitService.updateKit(kitId, updatedKit)
@@ -82,11 +81,9 @@ const KitDetailPage = () => {
     setKit((prevKit) => ({ ...prevKit, [name]: value }));
   };
 
+  // Handlers for adding dynamic fields
   const addContentItem = (type) => {
-    setContentItems((prevItems) => [
-      ...prevItems,
-      { id: uuidv4(), type, value: "" },
-    ]);
+    setContentItems((prevItems) => [...prevItems, { type, value: "" }]);
   };
 
   const handleContentChange = (index, newValue) => {
@@ -318,94 +315,90 @@ const KitDetailPage = () => {
                 Handover Kit Content
               </Typography>
 
-              <DragDropContext
-                onDragEnd={(result) => {
-                  if (!result.destination) return;
+<DragDropContext
+  onDragEnd={(result) => {
+    if (!result.destination) return;
 
-                  const reorderedItems = Array.from(contentItems);
-                  const [movedItem] = reorderedItems.splice(
-                    result.source.index,
-                    1
-                  );
-                  reorderedItems.splice(result.destination.index, 0, movedItem);
+    // Reorder the items
+    const reorderedItems = Array.from(contentItems);
+    const [movedItem] = reorderedItems.splice(result.source.index, 1);
+    reorderedItems.splice(result.destination.index, 0, movedItem);
 
-                  setContentItems(reorderedItems);
-                }}
-              >
-                <Droppable droppableId="contentItemsDroppable">
-                  {(provided) => (
-                    <Box
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                    >
-                      {contentItems.length === 0 ? (
-                        <Typography variant="body2" color="text.secondary">
-                          Click on the "Title", "Description", or "Paragraph"
-                          buttons on the left to add items here.
-                        </Typography>
-                      ) : (
-                        contentItems.map((item, index) => (
-                          <Draggable
-                            key={item.id} // Use unique ID from item
-                            draggableId={item.id} // Use unique ID from item
-                            index={index}
-                          >
-                            {(provided) => (
-                              <Box
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                sx={{
-                                  backgroundColor: "#444", // Slightly lighter background for the fields
-                                  borderRadius: 1,
-                                  padding: 2,
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: 2,
-                                }}
-                              >
-                                <TextField
-                                  variant="outlined"
-                                  fullWidth
-                                  margin="normal"
-                                  label={
-                                    item.type.charAt(0).toUpperCase() +
-                                    item.type.slice(1)
-                                  }
-                                  value={item.value}
-                                  onChange={(e) =>
-                                    handleContentChange(index, e.target.value)
-                                  }
-                                  multiline={item.type === "paragraph"}
-                                  rows={item.type === "paragraph" ? 4 : 1}
-                                  InputLabelProps={{
-                                    style: { color: "#fff" }, // White label text
-                                  }}
-                                  InputProps={{
-                                    style: { color: "#fff" }, // White input text
-                                  }}
-                                />
-                                <IconButton
-                                  color="error"
-                                  onClick={() =>
-                                    setContentItems((prevItems) =>
-                                      prevItems.filter((_, i) => i !== index)
-                                    )
-                                  }
-                                >
-                                  <Delete />
-                                </IconButton>
-                              </Box>
-                            )}
-                          </Draggable>
-                        ))
-                      )}
-                      {provided.placeholder}
-                    </Box>
-                  )}
-                </Droppable>
-              </DragDropContext>
+    setContentItems(reorderedItems);
+  }}
+>
+  <Droppable droppableId="contentItemsDroppable">
+    {(provided) => (
+      <Box
+        {...provided.droppableProps}
+        ref={provided.innerRef}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        {contentItems.length === 0 ? (
+          <Typography variant="body2" color="text.secondary">
+            Click on the "Title", "Description", or "Paragraph" buttons on
+            the left to add items here.
+          </Typography>
+        ) : (
+          contentItems.map((item, index) => (
+            <Draggable
+              key={index}
+              draggableId={`draggable-${index}`} // Unique ID for each item
+              index={index}
+            >
+              {(provided) => (
+                <Box
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  sx={{
+                    backgroundColor: "#444", // Slightly lighter background for the fields
+                    borderRadius: 1,
+                    padding: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    label={
+                      item.type.charAt(0).toUpperCase() + item.type.slice(1)
+                    } // Capitalize first letter of the type for label
+                    value={item.value}
+                    onChange={(e) => handleContentChange(index, e.target.value)}
+                    multiline={item.type === "paragraph"}
+                    rows={item.type === "paragraph" ? 4 : 1}
+                    InputLabelProps={{
+                      style: { color: "#fff" }, // White label text
+                    }}
+                    InputProps={{
+                      style: { color: "#fff" }, // White input text
+                    }}
+                  />
+                  <IconButton
+                    color="error"
+                    onClick={() =>
+                      setContentItems((prevItems) =>
+                        prevItems.filter((_, i) => i !== index)
+                      )
+                    }
+                  >
+                    <Delete />
+                  </IconButton>
+                </Box>
+              )}
+            </Draggable>
+          ))
+        )}
+        {provided.placeholder}
+      </Box>
+    )}
+  </Droppable>
+</DragDropContext>
+
             </Box>
           </Box>
         </Box>
@@ -415,4 +408,3 @@ const KitDetailPage = () => {
 };
 
 export default KitDetailPage;
-
