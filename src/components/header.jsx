@@ -56,7 +56,17 @@ const Header = () => {
           Kits
         </Button>
         {isLoggedIn && (
-          <Button color="inherit" onClick={() => handleNavigate("/profile")}>
+          <Button
+            color="inherit"
+            onClick={() => {
+              const profileId = localStorage.getItem("profileId");
+              if (profileId) {
+                handleNavigate(`/profile/${profileId}`);
+              } else {
+                handleNavigate("/profile");
+              }
+            }}
+          >
             Profile
           </Button>
         )}

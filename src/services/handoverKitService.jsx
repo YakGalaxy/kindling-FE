@@ -1,7 +1,7 @@
 import api from "./api";
 
 const HandoverKitService = {
-  getAllKits: () => api.get("/handover-kits"),
+  getAllKits: (userId) => api.get(`/handover-kits?userId=${userId}`), // Pass user ID as query parameter
   getKitById: (id) => api.get(`/handover-kits/${id}`),
   createKit: (kitData) => api.post("/handover-kits", kitData),
   updateKit: (id, kitData) => api.put(`/handover-kits/${id}`, kitData),

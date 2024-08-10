@@ -1,4 +1,5 @@
 export const logout = () => {
   localStorage.removeItem("token");
-  window.location.href = "/login"; // Redirect to login or home page
+  localStorage.removeItem("profileId"); // Clear profile ID
+  window.location.href = "/"; // Redirect to login or home page
 };

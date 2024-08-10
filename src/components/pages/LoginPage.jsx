@@ -30,8 +30,9 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await api.post("/auth/login", form);
-      const { authToken } = response.data;
+      const { authToken, profileId } = response.data;
       localStorage.setItem("token", authToken);
+      localStorage.setItem("profileId", profileId);
       navigate("/kits");
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);

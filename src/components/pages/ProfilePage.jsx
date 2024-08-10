@@ -9,7 +9,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import ProfileService from "../../services/profileService";
-import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
 
 const ProfilePage = () => {
@@ -21,51 +20,46 @@ const ProfilePage = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
+  const profileId = localStorage.getItem("profileId"); // Get profile ID from localStorage
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5005/auth/verify", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await response.json();
-        const userId = data._id;
+    if (!profileId) {
+      setError("No profile ID found.");
+      return;
+    }
 
-        // Fetch the profile associated with the user
-        const profileResponse = await ProfileService.getProfileById(userId);
-        setProfile({ ...profileResponse.data, password: "" });
-      } catch (error) {
-        setError("Failed to fetch profile.");
-        console.error(error);
-      } finally {
+    setLoading(true);
+    ProfileService.getProfileById(profileId) // Fetch profile by ID
+      .then((response) => {
+        setProfile({ ...response.data, password: "" }); // Don't display the password
         setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+      })
+      .catch((error) => {
+        setError("Failed to fetch profile.");
+        setLoading(false);
+        console.error(error);
+      });
+  }, [profileId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      await ProfileService.updateProfile(profile._id, profile);
-      setSuccess("Profile updated successfully!");
-      navigate(`/profile/${profile._id}`);
-    } catch (error) {
-      setError("Failed to update profile.");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    ProfileService.updateProfile(profileId, profile) // Update profile by ID
+      .then((response) => {
+        setSuccess("Profile updated successfully!");
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to update profile.");
+        setLoading(false);
+        console.error(error);
+      });
   };
 
   return (
@@ -123,7 +117,6 @@ const ProfilePage = () => {
             onChange={handleChange}
             fullWidth
             margin="normal"
-            placeholder="Leave blank to keep current password"
           />
           <Box sx={{ mt: 2 }}>
             <Button variant="contained" color="primary" type="submit" fullWidth>

@@ -1,9 +1,6 @@
 import api from "./api";
 
 const ProfileService = {
-  // Fetch all profiles (not needed for individual profile view)
-  getProfiles: () => api.get("/profiles"),
-
   // Fetch a specific profile by ID
   getProfileById: (id) => api.get(`/profiles/${id}`),
 

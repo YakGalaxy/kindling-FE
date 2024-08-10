@@ -16,26 +16,47 @@ import HandoverKitService from "../../services/handoverKitService";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
 import { logout } from "../../services/authService";
+import ProfileService from "../../services/profileService"; // Import profile service
 
 const KitsPage = () => {
   const [kits, setKits] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [userId, setUserId] = useState(null); // Store user ID
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLoading(true);
-    HandoverKitService.getAllKits()
-      .then((response) => {
-        setKits(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError("Failed to load kits.");
-        setLoading(false);
-        console.error(error);
-      });
+    const fetchUserProfile = async () => {
+      try {
+        const profileId = localStorage.getItem("profileId");
+        if (profileId) {
+          const response = await ProfileService.getProfileById(profileId);
+          setUserId(response.data.userId); // Assume userId is part of profile data
+        }
+      } catch (err) {
+        console.error("Failed to fetch user profile", err);
+        setError("Failed to fetch user profile.");
+      }
+    };
+
+    fetchUserProfile();
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      setLoading(true);
+      HandoverKitService.getAllKits(userId) // Pass user ID to filter kits
+        .then((response) => {
+          setKits(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setError("Failed to load kits.");
+          setLoading(false);
+          console.error(error);
+        });
+    }
+  }, [userId]);
 
   const handleLogout = () => {
     logout();
