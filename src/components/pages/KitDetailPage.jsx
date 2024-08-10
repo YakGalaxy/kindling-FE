@@ -57,25 +57,30 @@ const KitDetailPage = () => {
     setEditMode(!editMode);
   };
 
-  const handleSave = () => {
-    setLoading(true);
-    const updatedKit = {
-      title: kit.title,
-      description: kit.description,
-      contentItems,
-    };
-
-    HandoverKitService.updateKit(kitId, updatedKit)
-      .then((response) => {
-        setKit(response.data);
-        setEditMode(false);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError("Failed to update kit.");
-        setLoading(false);
-      });
+const handleSave = () => {
+  setLoading(true);
+  const updatedKit = {
+    title: kit.title,
+    description: kit.description,
+    contentItems: contentItems.map((item) => ({
+      type: item.type,
+      value: item.value,
+    })),
   };
+
+  HandoverKitService.updateKit(kitId, updatedKit)
+    .then((response) => {
+      setKit(response.data);
+      setEditMode(false);
+      setLoading(false);
+    })
+    .catch((error) => {
+      setError("Failed to update kit.");
+      setLoading(false);
+      console.error(error);
+    });
+};
+
 
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
