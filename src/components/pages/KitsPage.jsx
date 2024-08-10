@@ -9,7 +9,9 @@ import {
   CardContent,
   CardMedia,
   Box,
+  IconButton,
 } from "@mui/material";
+import { Delete } from "@mui/icons-material"; // Import the Delete icon
 import HandoverKitService from "../../services/handoverKitService";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
@@ -46,6 +48,20 @@ const KitsPage = () => {
 
   const handleCreateNewKit = () => {
     navigate("/kits/create");
+  };
+
+  const handleDelete = (kitId) => {
+    // Confirm deletion
+    if (window.confirm("Are you sure you want to delete this kit?")) {
+      HandoverKitService.deleteKit(kitId)
+        .then(() => {
+          setKits((prevKits) => prevKits.filter((kit) => kit._id !== kitId));
+        })
+        .catch((error) => {
+          setError("Failed to delete kit. Please try again.");
+          console.error(error);
+        });
+    }
   };
 
   const displayedKits = kits.slice(0, 7);
@@ -87,6 +103,7 @@ const KitsPage = () => {
                     <Grid item xs={12} sm={6} md={4} lg={3} key={kit._id}>
                       <Card
                         sx={{
+                          position: "relative", // Ensure that the trash icon can be positioned absolutely
                           cursor: "pointer",
                           transition: "transform 0.3s, box-shadow 0.3s",
                           "&:hover": {
@@ -113,6 +130,21 @@ const KitsPage = () => {
                             {kit.description}
                           </Typography>
                         </CardContent>
+                        {/* Trash Icon */}
+                        <IconButton
+                          sx={{
+                            position: "absolute",
+                            bottom: 8,
+                            right: 8,
+                            color: "#d32f2f", // Red color for the delete icon
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent card click event from firing
+                            handleDelete(kit._id);
+                          }}
+                        >
+                          <Delete />
+                        </IconButton>
                       </Card>
                     </Grid>
                   ))

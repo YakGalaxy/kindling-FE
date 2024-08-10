@@ -44,13 +44,38 @@ const KitCreationPage = () => {
   return (
     <>
       <Header />
-      <Container maxWidth="lg" sx={{ pt: 4 }}>
-        <Box sx={{ display: "flex", mb: 4 }}>
-          {/* Left Section */}
-          <Box sx={{ flex: "1 1 33%", pr: 2 }}>
-            <Typography variant="h5" component="h2" gutterBottom>
-              Kit Title
-            </Typography>
+      <Container
+        maxWidth="sm"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          pt: 4,
+          px: 2,
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            backgroundColor: "#2c2c2c", // Dark background color
+            color: "#fff", // Light text color for contrast
+            p: 4,
+            borderRadius: 1,
+            boxShadow: 1,
+            width: "100%",
+            maxWidth: "600px", // Control max width
+          }}
+        >
+          <Typography variant="h4" component="h1" gutterBottom>
+            Create New Kit
+          </Typography>
+          <Divider sx={{ bgcolor: "#444", mt: 1 }} />{" "}
+          {/* Darker divider color */}
+          <form onSubmit={handleSubmit} style={{ width: "100%" }}>
             <TextField
               label="Title"
               variant="outlined"
@@ -59,10 +84,13 @@ const KitCreationPage = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              InputLabelProps={{
+                style: { color: "#fff" }, // Light label color
+              }}
+              InputProps={{
+                style: { color: "#fff" }, // Light input text color
+              }}
             />
-            <Typography variant="h6" component="h3" gutterBottom>
-              Description
-            </Typography>
             <TextField
               label="Description"
               variant="outlined"
@@ -73,32 +101,40 @@ const KitCreationPage = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
+              InputLabelProps={{
+                style: { color: "#fff" }, // Light label color
+              }}
+              InputProps={{
+                style: { color: "#fff" }, // Light input text color
+              }}
             />
-          </Box>
 
-          {/* Right Section */}
-          <Box sx={{ flex: "1 1 67%", pl: 2 }}>
-            <Typography variant="h4" component="h1" gutterBottom>
-              Create New Kit
-            </Typography>
             {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
+              <Alert severity="error" sx={{ my: 2, bgcolor: "#d32f2f" }}>
                 {error}
               </Alert>
             )}
-            <Divider sx={{ my: 4 }} />
-            <form onSubmit={handleSubmit}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                sx={{ mt: 2 }}
-              >
-                {loading ? <CircularProgress size={24} /> : "Create"}
-              </Button>
-            </form>
-          </Box>
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={loading}
+              sx={{ mt: 2 }}
+              fullWidth
+            >
+              {loading ? <CircularProgress size={24} /> : "Create"}
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => navigate("/kits")}
+              sx={{ mt: 2 }}
+              fullWidth
+            >
+              Back
+            </Button>
+          </form>
         </Box>
       </Container>
     </>
