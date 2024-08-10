@@ -49,8 +49,8 @@ const KitContent = ({
             >
               {contentItems.length === 0 ? (
                 <Typography variant="body2" color="text.secondary">
-                  Click on the "Title", "Description", or "Paragraph" buttons on
-                  the left to add items here.
+                  Click on the "Title", "Description", "Paragraph", or "URL"
+                  buttons on the left to add items here.
                 </Typography>
               ) : (
                 contentItems.map((item, index) => (

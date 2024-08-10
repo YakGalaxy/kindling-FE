@@ -13,6 +13,9 @@ const AddContentButtons = ({ addContentItem }) => {
       <Button variant="outlined" onClick={() => addContentItem("paragraph")}>
         Paragraph
       </Button>
+      <Button variant="outlined" onClick={() => addContentItem("url")}>
+        URL
+      </Button>
     </Box>
   );
 };
