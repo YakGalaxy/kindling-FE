@@ -55,6 +55,11 @@ const Header = () => {
         <Button color="inherit" onClick={() => handleNavigate("/kits")}>
           Kits
         </Button>
+        {isLoggedIn && (
+          <Button color="inherit" onClick={() => handleNavigate("/profile")}>
+            Profile
+          </Button>
+        )}
         <Button color="inherit" onClick={handleAuthAction}>
           {isLoggedIn ? "Logout" : "Login"}
         </Button>

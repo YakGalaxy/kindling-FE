@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// Use import.meta.env for Vite-specific environment variables
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5005"; // Vite style
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5005";
 
 const api = axios.create({
   baseURL: API_URL,
@@ -9,7 +8,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
