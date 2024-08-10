@@ -63,16 +63,14 @@ const SignUpPage = () => {
         <Box
           sx={{
             display: "flex",
-            alignItems: "center", // Aligns items horizontally
-            mb: 2, // Adds some margin below the heading
+            alignItems: "center", 
+            mb: 2, 
           }}
         >
           <Typography variant="h4" component="h1">
             Sign Up
           </Typography>
           <Avatar sx={{ bgcolor: "primary.main", ml: 1 }}>
-            {" "}
-            {/* Added mr: 1 for margin */}
             <WhatshotIcon />
           </Avatar>
         </Box>

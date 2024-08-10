@@ -6,10 +6,16 @@ import {
   Button,
   Box,
   Alert,
-} from "@mui/material";
-import api from "../../services/api"; 
+  Link,
+  Grid,
+  Checkbox,
+  FormControlLabel,
+  Avatar,
+} from "@mui/material"; 
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
+import WhatshotIcon from "@mui/icons-material/Whatshot";
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -57,9 +63,20 @@ const LoginPage = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h4" component="h1" gutterBottom>
-            Login
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center", 
+              mb: 2, 
+            }}
+          >
+            <Typography variant="h4" component="h1">
+              Login
+            </Typography>
+            <Avatar sx={{ bgcolor: "primary.main", ml: 1 }}>
+              <WhatshotIcon />
+            </Avatar>
+          </Box>
           {error && (
             <Alert severity="error" sx={{ mb: 2, width: "100%" }}>
               {error}
@@ -86,6 +103,12 @@ const LoginPage = () => {
               margin="normal"
               required
             />
+            <FormControlLabel
+              control={<Checkbox name="remember" color="primary" />}
+              label="Remember me"
+              sx={{ mt: 1 }} 
+            />
+
             <Box sx={{ mt: 2 }}>
               <Button
                 variant="contained"
@@ -96,7 +119,22 @@ const LoginPage = () => {
                 Login
               </Button>
             </Box>
+
+            {/* Added "Forgot password?" and "Don't have an account?" links */}
+            <Grid container justifyContent="space-between" sx={{ mt: 2 }}>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/signup" variant="body2">
+                  Don't have an account?
+                </Link>
+              </Grid>
+            </Grid>
           </Box>
+
           <Box sx={{ mt: 2, width: "100%" }}>
             <Button
               variant="text"
