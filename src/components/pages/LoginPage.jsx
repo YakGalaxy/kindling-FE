@@ -11,7 +11,7 @@ import {
   Checkbox,
   FormControlLabel,
   Avatar,
-} from "@mui/material"; 
+} from "@mui/material";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
@@ -20,6 +20,7 @@ import WhatshotIcon from "@mui/icons-material/Whatshot";
 const LoginPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,6 +29,16 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    // Basic client-side validation
+    if (!form.email || !form.password) {
+      setError("Please fill out all fields.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await api.post("/auth/login", form);
       const { authToken, profileId } = response.data;
@@ -37,6 +48,8 @@ const LoginPage = () => {
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);
       setError("Login failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,8 +80,8 @@ const LoginPage = () => {
           <Box
             sx={{
               display: "flex",
-              alignItems: "center", 
-              mb: 2, 
+              alignItems: "center",
+              mb: 2,
             }}
           >
             <Typography variant="h4" component="h1">
@@ -107,21 +120,19 @@ const LoginPage = () => {
             <FormControlLabel
               control={<Checkbox name="remember" color="primary" />}
               label="Remember me"
-              sx={{ mt: 1 }} 
+              sx={{ mt: 1 }}
             />
-
             <Box sx={{ mt: 2 }}>
               <Button
                 variant="contained"
                 color="primary"
                 type="submit"
                 fullWidth
+                disabled={loading}
               >
-                Login
+                {loading ? "Logging In..." : "Login"}
               </Button>
             </Box>
-
-            {/* Added "Forgot password?" and "Don't have an account?" links */}
             <Grid container justifyContent="space-between" sx={{ mt: 2 }}>
               <Grid item>
                 <Link href="#" variant="body2">
@@ -135,7 +146,6 @@ const LoginPage = () => {
               </Grid>
             </Grid>
           </Box>
-
           <Box sx={{ mt: 2, width: "100%" }}>
             <Button
               variant="text"

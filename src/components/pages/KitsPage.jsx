@@ -25,22 +25,27 @@ const KitsPage = () => {
   const [userId, setUserId] = useState(null); // Store user ID
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const profileId = localStorage.getItem("profileId");
-        if (profileId) {
-          const response = await ProfileService.getProfileById(profileId);
-          setUserId(response.data.userId); // Assume userId is part of profile data
+useEffect(() => {
+  const fetchUserProfile = async () => {
+    try {
+      const profileId = localStorage.getItem("profileId");
+      if (profileId) {
+        const response = await ProfileService.getProfileById(profileId);
+        console.log("Profile response:", response.data); // Debugging
+        if (response.data && response.data._id) {
+          setUserId(response.data._id); // Ensure this is the correct field
+        } else {
+          throw new Error("User ID not found in profile data");
         }
-      } catch (err) {
-        console.error("Failed to fetch user profile", err);
-        setError("Failed to fetch user profile.");
       }
-    };
+    } catch (err) {
+      console.error("Failed to fetch user profile", err);
+      setError("Failed to fetch user profile.");
+    }
+  };
 
-    fetchUserProfile();
-  }, []);
+  fetchUserProfile();
+}, []);
 
   useEffect(() => {
     if (userId) {
