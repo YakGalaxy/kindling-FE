@@ -19,7 +19,7 @@ const KitSharingLinks = ({ shareableUrl }) => {
             <CopyAll />
           </IconButton>
         </Tooltip>
-        <Typography variant="body1" sx={{ ml: 1 }}>
+        <Typography variant="body1" sx={{ ml: 1, overflowWrap: "break-word" }}>
           {shareableUrl}
         </Typography>
       </Box>
@@ -28,8 +28,9 @@ const KitSharingLinks = ({ shareableUrl }) => {
           <IconButton
             onClick={() =>
               window.open(
-                "https://www.facebook.com/sharer/sharer.php?u=" +
-                  encodeURIComponent(shareableUrl),
+                `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                  shareableUrl
+                )}`,
                 "_blank"
               )
             }
@@ -41,8 +42,9 @@ const KitSharingLinks = ({ shareableUrl }) => {
           <IconButton
             onClick={() =>
               window.open(
-                "https://twitter.com/intent/tweet?url=" +
-                  encodeURIComponent(shareableUrl),
+                `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                  shareableUrl
+                )}`,
                 "_blank"
               )
             }
@@ -54,8 +56,9 @@ const KitSharingLinks = ({ shareableUrl }) => {
           <IconButton
             onClick={() =>
               window.open(
-                "https://www.linkedin.com/shareArticle?url=" +
-                  encodeURIComponent(shareableUrl),
+                `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(
+                  shareableUrl
+                )}`,
                 "_blank"
               )
             }

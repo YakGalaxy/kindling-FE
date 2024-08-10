@@ -1,20 +1,9 @@
 import React from "react";
-import { Box, Typography, TextField, Button } from "@mui/material";
+import { Box, Typography, TextField } from "@mui/material";
 
-const KitHeader = ({
-  kit,
-  editMode,
-  handleChange,
-  handleSave,
-  setEditMode,
-}) => {
-  const handleEditToggle = () => setEditMode(!editMode);
-
+const KitHeader = ({ kit, editMode, handleChange }) => {
   return (
     <Box sx={{ flex: "1 1 33%", pr: 2 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Kit Details
-      </Typography>
       <TextField
         name="title"
         label="Title"
@@ -43,30 +32,6 @@ const KitHeader = ({
         }}
         sx={{ mb: 2 }}
       />
-      <Box sx={{ display: "flex", gap: 2 }}>
-        {editMode ? (
-          <>
-            <Button variant="contained" color="primary" onClick={handleSave}>
-              Save
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={handleEditToggle}
-            >
-              Cancel
-            </Button>
-          </>
-        ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleEditToggle}
-          >
-            Edit
-          </Button>
-        )}
-      </Box>
     </Box>
   );
 };
