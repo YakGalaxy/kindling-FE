@@ -6,10 +6,14 @@ import {
   Button,
   Box,
   Alert,
+  Avatar,
+  Link,
+  Grid,
 } from "@mui/material";
-import api from "../../services/api"; 
+import WhatshotIcon from "@mui/icons-material/Whatshot";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/header"; 
+import Header from "../../components/header";
 
 const SignUpPage = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -56,9 +60,22 @@ const SignUpPage = () => {
           p: 3,
         }}
       >
-        <Typography variant="h4" component="h1" gutterBottom>
-          Sign Up
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center", // Aligns items horizontally
+            mb: 2, // Adds some margin below the heading
+          }}
+        >
+          <Typography variant="h4" component="h1">
+            Sign Up
+          </Typography>
+          <Avatar sx={{ bgcolor: "primary.main", ml: 1 }}>
+            {" "}
+            {/* Added mr: 1 for margin */}
+            <WhatshotIcon />
+          </Avatar>
+        </Box>
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -69,6 +86,7 @@ const SignUpPage = () => {
             {success}
           </Alert>
         )}
+
         <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
           <TextField
             label="Username"
@@ -99,6 +117,15 @@ const SignUpPage = () => {
             margin="normal"
             required
           />
+
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="/login" variant="body2" sx={{ mt: 2 }}>
+                Already have an account?
+              </Link>
+            </Grid>
+          </Grid>
+
           <Box sx={{ mt: 2 }}>
             <Button variant="contained" color="primary" type="submit" fullWidth>
               Sign Up
