@@ -1,27 +1,51 @@
 import React from "react";
 import { Grid, Card, CardContent, CardMedia, Typography } from "@mui/material";
 
-const LinkCards = () => {
+const predefinedLinks = [
+  {
+    title: "GitHub Repository",
+    description: "Add a repository",
+    image: "https://placehold.co/150",
+    url: "https://github.com",
+  },
+  {
+    title: "Miro Board",
+    description: "Add a Miro board",
+    image: "https://placehold.co/150",
+    url: "https://miro.com",
+  },
+  {
+    title: "Office 365 Item",
+    description: "Add an O365 item",
+    image: "https://placehold.co/150",
+    url: "https://office.com",
+  },
+  {
+    title: "Google Sheet",
+    description: "Add a Google Sheet",
+    image: "https://placehold.co/150",
+    url: "https://sheets.google.com",
+  },
+];
+
+const LinkCards = ({ onLinkClick }) => {
   return (
-    <Grid container spacing={2} sx={{ mb: 4 }}>
-      {Array.from({ length: 4 }).map((_, index) => (
+    <Grid container spacing={2}>
+      {predefinedLinks.map((link, index) => (
         <Grid item xs={12} sm={6} key={index}>
-          <Card
-            sx={{ cursor: "pointer" }}
-            onClick={() => window.open("https://example.com", "_blank")} // Placeholder link
-          >
+          <Card sx={{ cursor: "pointer" }} onClick={() => onLinkClick(link)}>
             <CardMedia
               component="img"
               height="140"
-              image="https://placehold.co/150"
-              alt={`Link ${index + 1}`}
+              image={link.image}
+              alt={link.title}
             />
             <CardContent>
               <Typography variant="h6" component="div">
-                Link Title {index + 1}
+                {link.title}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Short description for Link {index + 1}.
+                {link.description}
               </Typography>
             </CardContent>
           </Card>

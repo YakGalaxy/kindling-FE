@@ -38,10 +38,10 @@ const KitDetailPage = () => {
       });
   }, [kitId]);
 
-  const addContentItem = (type) => {
+  const addContentItem = (type, title, url) => {
     setContentItems((prevItems) => [
       ...prevItems,
-      { id: Date.now().toString(), type, value: "" },
+      { id: Date.now().toString(), type, value: title, url },
     ]);
   };
 
@@ -57,30 +57,34 @@ const KitDetailPage = () => {
     setEditMode(!editMode);
   };
 
-const handleSave = () => {
-  setLoading(true);
-  const updatedKit = {
-    title: kit.title,
-    description: kit.description,
-    contentItems: contentItems.map((item) => ({
-      type: item.type,
-      value: item.value,
-    })),
+  const handleSave = () => {
+    setLoading(true);
+    const updatedKit = {
+      title: kit.title,
+      description: kit.description,
+      contentItems: contentItems.map((item) => ({
+        type: item.type,
+        value: item.value,
+        url: item.url,
+      })),
+    };
+
+    HandoverKitService.updateKit(kitId, updatedKit)
+      .then((response) => {
+        setKit(response.data);
+        setEditMode(false);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to update kit.");
+        setLoading(false);
+        console.error(error);
+      });
   };
 
-  HandoverKitService.updateKit(kitId, updatedKit)
-    .then((response) => {
-      setKit(response.data);
-      setEditMode(false);
-      setLoading(false);
-    })
-    .catch((error) => {
-      setError("Failed to update kit.");
-      setLoading(false);
-      console.error(error);
-    });
-};
-
+  const handleLinkClick = (link) => {
+    addContentItem("link", link.title, link.url);
+  };
 
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
@@ -138,7 +142,7 @@ const handleSave = () => {
             <Typography variant="h6" component="h3" gutterBottom sx={{ mt: 4 }}>
               Add Links
             </Typography>
-            <LinkCards />
+            <LinkCards onLinkClick={handleLinkClick} />
           </Box>
 
           <Box sx={{ flex: "1 1 67%", pl: 2 }}>
