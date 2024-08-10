@@ -7,14 +7,14 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia, // Ensure this is imported
+  CardMedia,
   Box,
   Button,
 } from "@mui/material";
 import HandoverKitService from "../../services/handoverKitService";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
-import { logout } from "../../services/authService"; // Ensure this path is correct
+import { logout } from "../../services/authService";
 
 const KitsPage = () => {
   const [kits, setKits] = useState([]);
@@ -49,13 +49,12 @@ const KitsPage = () => {
     navigate("/kits/create");
   };
 
-  // Limit kits to a maximum of 7 items, as the 8th item will be the "Add a Kit" card
   const displayedKits = kits.slice(0, 7);
 
   return (
     <>
       <Header />
-      <Container maxWidth="lg" sx={{ pt: 4 }}>
+      <Container maxWidth="lg" sx={{ pt: 4}}>
         <Typography variant="h4" component="h1" gutterBottom>
           Handover Kits
         </Typography>
@@ -73,13 +72,20 @@ const KitsPage = () => {
                 displayedKits.map((kit) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={kit._id}>
                     <Card
-                      sx={{ cursor: "pointer" }}
+                      sx={{
+                        cursor: "pointer",
+                        transition: "transform 0.3s, box-shadow 0.3s", // Added transition for smooth effect
+                        "&:hover": {
+                          transform: "scale(1.05)", // Scale up slightly on hover
+                          boxShadow: 6, // Increase shadow on hover
+                        },
+                      }}
                       onClick={() => handleKitClick(kit._id)}
                     >
                       <CardMedia
                         component="img"
                         height="140"
-                        image={kit.imageUrl || "https://placehold.co/150"} // Placeholder image if none provided
+                        image={kit.imageUrl || "https://picsum.photos/150.webp?grayscale"}
                         alt={kit.title}
                       />
                       <CardContent>
@@ -98,7 +104,7 @@ const KitsPage = () => {
                   No handover kits available.
                 </Typography>
               )}
-              {/* Add "Create New Kit" card */}
+              {/* Update "Create New Kit" card */}
               <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Card
                   sx={{
@@ -106,11 +112,14 @@ const KitsPage = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     cursor: "pointer",
-                    backgroundColor: "#6a1b9a", // Purple background color
-                    color: "white", // Text color for contrast
+                    backgroundColor: "#6a1b9a",
+                    color: "white",
+                    transition:
+                      "background-color 0.3s, transform 0.3s, box-shadow 0.3s", // Added transition for smooth effect
                     "&:hover": {
-                      backgroundColor: "#4a148c", // Darker shade of purple on hover
-                      transition: "background-color 0.3s",
+                      backgroundColor: "#4a148c",
+                      transform: "scale(1.05)", // Scale up slightly on hover
+                      boxShadow: 6, // Increase shadow on hover
                     },
                   }}
                   onClick={handleCreateNewKit}
@@ -126,7 +135,7 @@ const KitsPage = () => {
                     }}
                   >
                     <Typography variant="h6" component="div">
-                      + Add a Kit
+                      Create a new Kit
                     </Typography>
                   </Box>
                 </Card>
