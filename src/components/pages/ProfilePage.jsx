@@ -15,7 +15,7 @@ const ProfilePage = () => {
   const [profile, setProfile] = useState({
     username: "",
     email: "",
-    password: "",
+    password: "", // Keep the password field blank initially
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -32,7 +32,12 @@ const ProfilePage = () => {
     setLoading(true);
     ProfileService.getProfileById(profileId) // Fetch profile by ID
       .then((response) => {
-        setProfile({ ...response.data, password: "" }); // Don't display the password
+        const { user } = response.data;
+        setProfile({
+          username: user.username,
+          email: user.email,
+          password: "",
+        });
         setLoading(false);
       })
       .catch((error) => {
@@ -51,7 +56,7 @@ const ProfilePage = () => {
     e.preventDefault();
     setLoading(true);
     ProfileService.updateProfile(profileId, profile) // Update profile by ID
-      .then((response) => {
+      .then(() => {
         setSuccess("Profile updated successfully!");
         setLoading(false);
       })
@@ -117,6 +122,7 @@ const ProfilePage = () => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            placeholder="Enter new password"
           />
           <Box sx={{ mt: 2 }}>
             <Button variant="contained" color="primary" type="submit" fullWidth>
