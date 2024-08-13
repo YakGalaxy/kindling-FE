@@ -52,20 +52,28 @@ const ProfilePage = () => {
     setProfile({ ...profile, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    ProfileService.updateProfile(profileId, profile) // Update profile by ID
-      .then(() => {
-        setSuccess("Profile updated successfully!");
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError("Failed to update profile.");
-        setLoading(false);
-        console.error(error);
-      });
+const handleSubmit = (e) => {
+  e.preventDefault();
+  setLoading(true);
+
+  // Create an object with only the fields to be updated
+  const updatedProfile = {
+    username: profile.username,
+    email: profile.email,
+    ...(profile.password && { password: profile.password }), // Only include password if it's provided
   };
+
+  ProfileService.updateProfile(profileId, updatedProfile)
+    .then(() => {
+      setSuccess("Profile updated successfully!");
+      setLoading(false);
+    })
+    .catch((error) => {
+      setError("Failed to update profile.");
+      setLoading(false);
+      console.error(error);
+    });
+};
 
   return (
     <>
