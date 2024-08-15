@@ -118,11 +118,71 @@ const KitsPage = () => {
               {error}
             </Alert>
           )}
-          {!loading && displayedKits.length === 0 && (
+          {loading ? (
+            <CircularProgress />
+          ) : (
             <>
-              <Alert severity="warning" sx={{ mb: 2, alignSelf: "flex-start" }}>
-                You have no handover kits available.
-              </Alert>
+              <Box sx={{ width: "100%", mb: 4 }}>
+                <Grid container spacing={4}>
+                  {displayedKits.length > 0 ? (
+                    displayedKits.map((kit) => (
+                      <Grid item xs={12} sm={6} md={4} lg={3} key={kit._id}>
+                        <Card
+                          sx={{
+                            position: "relative",
+                            cursor: "pointer",
+                            transition: "transform 0.3s, box-shadow 0.3s",
+                            "&:hover": {
+                              transform: "scale(1.05)",
+                              boxShadow: 6,
+                            },
+                          }}
+                          onClick={() => handleKitClick(kit._id)}
+                        >
+                          <CardMedia
+                            component="img"
+                            height="140"
+                            image={
+                              kit.imageUrl ||
+                              "https://picsum.photos/150.webp?grayscale"
+                            }
+                            alt={kit.title}
+                          />
+                          <CardContent>
+                            <Typography variant="h6" component="div">
+                              {kit.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {kit.description}
+                            </Typography>
+                          </CardContent>
+                          <IconButton
+                            sx={{
+                              position: "absolute",
+                              bottom: 8,
+                              right: 8,
+                              color: "#d32f2f",
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(kit._id);
+                            }}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Card>
+                      </Grid>
+                    ))
+                  ) : (
+                    <Alert
+                      severity="warning"
+                      sx={{ mb: 2, alignSelf: "flex-start" }}
+                    >
+                      You have no handover kits available.
+                    </Alert>
+                  )}
+                </Grid>
+              </Box>
               <Card
                 sx={{
                   cursor: "pointer",
@@ -136,80 +196,18 @@ const KitsPage = () => {
                     transform: "scale(1.05)",
                     boxShadow: 6,
                   },
-                  alignSelf: "flex-start", // Align to the left
-                  maxWidth: 300, // Set a maximum width for the card
+                  alignSelf: "flex-start",
+                  maxWidth: 300,
                 }}
                 onClick={handleCreateNewKit}
               >
-                <Box
-                  sx={{
-                    p: 2,
-                    textAlign: "center",
-                  }}
-                >
+                <Box sx={{ p: 2, textAlign: "center" }}>
                   <Typography variant="h6" component="div">
                     Create a new Kit
                   </Typography>
                 </Box>
               </Card>
             </>
-          )}
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <Box sx={{ width: "100%" }}>
-              <Grid container spacing={4}>
-                {displayedKits.length > 0 &&
-                  displayedKits.map((kit) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={kit._id}>
-                      <Card
-                        sx={{
-                          position: "relative",
-                          cursor: "pointer",
-                          transition: "transform 0.3s, box-shadow 0.3s",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                            boxShadow: 6,
-                          },
-                        }}
-                        onClick={() => handleKitClick(kit._id)}
-                      >
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={
-                            kit.imageUrl ||
-                            "https://picsum.photos/150.webp?grayscale"
-                          }
-                          alt={kit.title}
-                        />
-                        <CardContent>
-                          <Typography variant="h6" component="div">
-                            {kit.title}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {kit.description}
-                          </Typography>
-                        </CardContent>
-                        <IconButton
-                          sx={{
-                            position: "absolute",
-                            bottom: 8,
-                            right: 8,
-                            color: "#d32f2f",
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(kit._id);
-                          }}
-                        >
-                          <Delete />
-                        </IconButton>
-                      </Card>
-                    </Grid>
-                  ))}
-              </Grid>
-            </Box>
           )}
         </Box>
       </Container>
